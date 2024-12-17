@@ -1,82 +1,96 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
+import { Input } from "@/components";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-interface FormData {
+interface SignUpFormData {
   email: string;
   password: string;
 }
 
 export default function SignUp() {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<SignUpFormData>();
+  const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log("Form submitted:", data);
+  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.error || "Failed to create account.");
+        return;
+      }
+
+      toast.success(
+        "Account created successfully! Now you can login using your credentials"
+      );
+      router.push("/signin");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
-    <Box className="flex items-center justify-center min-h-screen bg-[#093545]">
-      <Box
-        component="form"
+    <Box className="flex items-center justify-center min-h-screen">
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg"
+        className="w-full max-w-sm p-6 space-y-4"
       >
         <Typography
-          variant="h4"
-          className="text-center mb-4 font-bold text-[#093545]"
+          variant="h3"
+          component="h1"
+          className="text-white font-bold text-center mb-4"
         >
           Sign Up
         </Typography>
 
-        {/* Email Field */}
-        <TextField
+        <Input
+          name="email"
           label="Email"
-          variant="outlined"
-          fullWidth
-          {...register("email", {
+          control={control}
+          error={errors.email?.message}
+          rules={{
             required: "Email is required",
             pattern: {
               value: /^\S+@\S+$/i,
-              message: "Enter a valid email address",
+              message: "Please enter a valid email",
             },
-          })}
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          className="mb-4"
+          }}
         />
 
-        {/* Password Field */}
-        <TextField
+        <Input
+          name="password"
           label="Password"
           type="password"
-          variant="outlined"
-          fullWidth
-          {...register("password", {
+          control={control}
+          error={errors.password?.message}
+          rules={{
             required: "Password is required",
             minLength: {
               value: 6,
               message: "Password must be at least 6 characters",
             },
-          })}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          className="mb-6"
+          }}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          className="!bg-green-500 hover:!bg-green-600 text-white font-semibold"
-        >
+        <Button type="submit" fullWidth variant="contained" color="success">
           Sign Up
         </Button>
-      </Box>
+      </form>
     </Box>
   );
 }

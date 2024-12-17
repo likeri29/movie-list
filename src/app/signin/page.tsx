@@ -1,17 +1,26 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import {
+  Button,
+  Typography,
+  Box,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { Input } from "@/components";
 
 interface SignInFormData {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 export default function SignIn() {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInFormData>();
@@ -21,61 +30,96 @@ export default function SignIn() {
     setError("");
 
     const result = await signIn("credentials", {
+      redirect: false,
       email: data.email,
       password: data.password,
-      redirect: false, // Prevent automatic redirection
     });
+
+    console.log(result);
 
     if (result?.error) {
       setError("Invalid email or password");
     } else {
-      // Redirect to the home page or dashboard
       window.location.href = "/";
     }
   };
 
   return (
-    <div>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Email Field */}
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Enter a valid email address",
-              },
-            })}
+    <Box
+      className="flex items-center justify-center min-h-screen bg-[#093545]"
+      component="div"
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-sm p-6 bg-transparent rounded-lg space-y-4"
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          className="text-white font-bold text-center mb-4"
+        >
+          Sign in
+        </Typography>
+
+        <Input
+          name="email"
+          label="Email"
+          control={control}
+          error={errors.email?.message}
+          rules={{ required: "Email is required" }}
+        />
+
+        <Input
+          name="password"
+          label="Password"
+          type="password"
+          control={control}
+          error={errors.password?.message}
+          rules={{
+            required: "Password is required",
+          }}
+        />
+        <Box className="align">
+          <Controller
+            name="rememberMe"
+            control={control}
+            defaultValue={false}
+            render={({ field }) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                    sx={{
+                      color: "#A3B9BF",
+
+                      "&.Mui-checked": {
+                        color: "#2BD17E",
+                      },
+                    }}
+                  />
+                }
+                label={
+                  <Typography className="text-[#A3B9BF] text-sm">
+                    Remember me
+                  </Typography>
+                }
+              />
+            )}
           />
-          {errors.email && (
-            <p style={{ color: "red" }}>{errors.email.message}</p>
-          )}
-        </div>
+        </Box>
 
-        {/* Password Field */}
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password", {
-              required: "Password is required",
-            })}
-          />
-          {errors.password && (
-            <p style={{ color: "red" }}>{errors.password.message}</p>
-          )}
-        </div>
+        <Button type="submit" fullWidth variant="contained" color="primary">
+          Login
+        </Button>
 
-        {/* Submit Button */}
-        <button type="submit">Sign In</button>
-      </form>
-
-      {/* Error Message */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+        {error && (
+          <Typography className="text-red-500 text-sm text-center">
+            {error}
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 }
