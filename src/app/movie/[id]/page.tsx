@@ -77,8 +77,8 @@ export default function EditMoviePage() {
   }
 
   return (
-    <Box className="flex flex-col w-full h-screen p-10 md:p-20 lg:p-[120px] gap-10 mb-60 md:mb-0">
-      <Typography variant="h3" className="text-white mb-8 font-bold">
+    <Box className="flex flex-col w-full h-screen p-10 md:p-20 lg:p-[120px] gap-10 md:gap-20 mb-72 sm:mb-72 md:mb-28 2xl:mb-0">
+      <Typography variant="h3" className="text-white font-bold">
         Edit Movie
       </Typography>
 
