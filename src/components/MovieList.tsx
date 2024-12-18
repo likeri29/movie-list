@@ -108,7 +108,13 @@ export function MovieList() {
         ))}
       </Grid2>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          mb: { xs: 12, md: 0 },
+        }}
+      >
         <Pagination
           totalPages={data?.totalPages || 1}
           currentPage={page}

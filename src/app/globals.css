@@ -22,7 +22,6 @@ body {
 .layout-background {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
 }
 
 .layout-background::after {

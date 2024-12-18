@@ -48,7 +48,7 @@ export default function AddMoviePage() {
     });
 
   return (
-    <Box className="flex flex-col w-full h-screen p-10 md:p-20 lg:p-[120px] gap-10 md:gap-20 lg:gap-[120px]">
+    <Box className="flex flex-col w-full h-screen p-10 md:p-20 lg:p-[120px] gap-10 md:gap-20 lg:gap-[120px] mb-72 md:mb-0">
       <Typography variant="h3" className="text-white mb-8 font-bold">
         Create a new movie
       </Typography>

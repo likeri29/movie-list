@@ -42,13 +42,13 @@ export async function PATCH(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { title, publishingYear, image } = await req.json();
+    const { title, year, image } = await req.json();
 
     const updatedMovie = await prisma.movieList.update({
       where: { id },
       data: {
         ...(title && { title }),
-        ...(publishingYear && { publishingYear: parseInt(publishingYear) }),
+        ...(year && { publishingYear: parseInt(year) }),
         ...(image && { image }),
       },
     });

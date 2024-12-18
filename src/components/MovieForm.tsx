@@ -53,14 +53,14 @@ export function MovieForm({
         />
       </Box>
 
-      <Box className="w-3/4 flex flex-col gap-6">
+      <Box className="w-full md:w-3/4 flex flex-col gap-6">
         <Input
           name="title"
           label="Title"
           control={control}
           error={errors.title?.message}
           rules={{ required: "Title is required" }}
-          className="max-w-[362px]"
+          className="w-full md:max-w-[362px]"
         />
 
         <Input
@@ -75,10 +75,10 @@ export function MovieForm({
               message: "Enter a valid year (e.g., 2024)",
             },
           }}
-          className="max-w-[216px]"
+          className="w-full md:max-w-[216px]"
         />
 
-        <Box className="flex flex-col md:flex-row gap-2 max-w-[362px] mt-6 md:mt-14">
+        <Box className="flex flex-col md:flex-row gap-2 w-full md:max-w-[362px] mt-0 md:mt-6 mb-20 md:mb-0">
           <Button variant="outlined" fullWidth component={Link} href="/">
             Cancel
           </Button>
