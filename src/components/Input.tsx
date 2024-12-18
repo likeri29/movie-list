@@ -11,6 +11,7 @@ interface InputProps {
   error?: string;
   type?: string;
   rules?: RegisterOptions;
+  className?: string;
 }
 
 export function Input({
@@ -20,9 +21,10 @@ export function Input({
   error,
   rules,
   type = "text",
+  className,
 }: InputProps) {
   return (
-    <Box>
+    <Box className={className}>
       <Controller
         name={name}
         control={control}
