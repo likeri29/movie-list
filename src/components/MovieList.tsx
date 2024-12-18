@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 import { useGetMoviesQuery } from "@/store/movieApi";
 import {
   Box,
@@ -13,15 +14,22 @@ import {
   IconButton,
 } from "@mui/material";
 import { Logout, AddCircleOutline } from "@mui/icons-material";
+import { Pagination } from "./Pagination";
 import { MovieCard } from "./MovieCard";
 
 export function MovieList() {
-  const { data, isLoading } = useGetMoviesQuery(undefined);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, refetch } = useGetMoviesQuery({ page });
 
   const handleLogout = () => {
     signOut({
       callbackUrl: "/signin",
     });
+  };
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    refetch();
   };
 
   if (isLoading) {
@@ -99,6 +107,14 @@ export function MovieList() {
           </Grid>
         ))}
       </Grid2>
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Pagination
+          totalPages={data?.totalPages || 1}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
+      </Box>
     </Box>
   );
 }

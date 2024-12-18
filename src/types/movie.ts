@@ -10,6 +10,9 @@ export interface Movie {
 
 export interface MoviesResponse {
   movies: Movie[];
+  totalPages: number;
+  totalMovies: number;
+  currentPage: number;
 }
 
 export interface MovieFormValues {

@@ -8,8 +8,8 @@ export const movieApi = createApi({
   }),
   tagTypes: ["Movies"],
   endpoints: (builder) => ({
-    getMovies: builder.query<MoviesResponse, void>({
-      query: () => "movieList",
+    getMovies: builder.query<MoviesResponse, { page: number }>({
+      query: ({ page }) => `movieList?page=${page}&limit=8`,
       providesTags: [{ type: "Movies", id: "LIST" }],
     }),
 
