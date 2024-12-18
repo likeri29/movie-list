@@ -46,3 +46,28 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !session.user.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = session.user.id;
+
+    const movies = await prisma.movieList.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json({ movies }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch movies" },
+      { status: 500 }
+    );
+  }
+}
