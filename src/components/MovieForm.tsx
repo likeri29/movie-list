@@ -7,14 +7,17 @@ import { MovieFormValues } from "@/types";
 
 interface MovieFormProps {
   onSubmit: (data: MovieFormValues) => void;
+  defaultValues?: MovieFormValues;
 }
 
-export function MovieForm({ onSubmit }: MovieFormProps) {
+export function MovieForm({ onSubmit, defaultValues }: MovieFormProps) {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<MovieFormValues>();
+  } = useForm<MovieFormValues>({
+    defaultValues,
+  });
 
   return (
     <form
@@ -26,12 +29,13 @@ export function MovieForm({ onSubmit }: MovieFormProps) {
           name="image"
           control={control}
           rules={{ required: "Image is required" }}
-          render={({ field: { onChange }, fieldState: { error } }) => (
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Box>
               <ImagePicker
                 onImageSelect={(file: File) => {
                   onChange(file);
                 }}
+                previewImage={typeof value === "string" ? value : null}
               />
               {error && (
                 <Typography variant="body2" color="error" className="mt-2">
