@@ -4,6 +4,7 @@ import theme from "@/theme";
 import { ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "next-auth/react";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -23,7 +24,7 @@ export function Providers({ children }: ProvidersProps) {
           pauseOnHover
           theme="light"
         />
-        {children}
+        <ProtectedRoute>{children}</ProtectedRoute>
       </ThemeProvider>
     </SessionProvider>
   );

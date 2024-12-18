@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import Link from "next/link";
 import { Button, Typography, Box } from "@mui/material";
 import { Input } from "@/components";
 import { toast } from "react-toastify";
@@ -45,7 +46,7 @@ export default function SignUp() {
   };
 
   return (
-    <Box className="flex items-center justify-center min-h-screen">
+    <Box className="flex items-center flex-col justify-center min-h-screen">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-sm p-6 space-y-4"
@@ -91,6 +92,9 @@ export default function SignUp() {
           Sign Up
         </Button>
       </form>
+      <Link href="/signin" className="text-[#2BD17E] hover:opacity-60">
+        Sign in
+      </Link>
     </Box>
   );
 }

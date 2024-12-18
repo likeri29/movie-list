@@ -11,6 +11,7 @@ import {
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { Input } from "@/components";
+import Link from "next/link";
 
 interface SignInFormData {
   email: string;
@@ -46,7 +47,7 @@ export default function SignIn() {
 
   return (
     <Box
-      className="flex items-center justify-center min-h-screen bg-[#093545]"
+      className="flex items-center justify-center flex-col min-h-screen bg-[#093545]"
       component="div"
     >
       <Box
@@ -80,7 +81,7 @@ export default function SignIn() {
             required: "Password is required",
           }}
         />
-        <Box className="align">
+        <Box className="flex justify-center align-center">
           <Controller
             name="rememberMe"
             control={control}
@@ -92,7 +93,7 @@ export default function SignIn() {
                     {...field}
                     checked={field.value}
                     sx={{
-                      color: "#A3B9BF",
+                      color: "#224957",
 
                       "&.Mui-checked": {
                         color: "#2BD17E",
@@ -120,6 +121,9 @@ export default function SignIn() {
           </Typography>
         )}
       </Box>
+      <Link href="/signup" className="text-[#2BD17E] hover:opacity-60">
+        Sign up
+      </Link>
     </Box>
   );
 }
