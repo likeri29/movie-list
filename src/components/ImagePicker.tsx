@@ -15,6 +15,7 @@ export function ImagePicker({ onImageSelect, previewImage }: ImagePickerProps) {
     previewImage || null
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (previewImage) {
@@ -35,11 +36,37 @@ export function ImagePicker({ onImageSelect, previewImage }: ImagePickerProps) {
     fileInputRef.current?.click();
   };
 
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setLocalPreviewImage(imageUrl);
+      onImageSelect(file);
+    }
+  };
+
   return (
     <Box
       onClick={handleClick}
-      className="w-[300px] h-[300px] sm:w-[350px] sm:h-[400px] md:w-[400px] md:h-[450px] lg:w-[470px] lg:h-[500px] 
-        flex justify-center items-center cursor-pointer border-2 border-dashed border-white rounded-lg bg-[#224957] hover:bg-[#092C39]"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`w-[300px] h-[300px] sm:w-[350px] sm:h-[400px] md:w-[400px] md:h-[450px] lg:w-[470px] lg:h-[500px] 
+        flex justify-center items-center cursor-pointer border-2 ${
+          isDragging ? "bg-[#092C39]" : "border-white"
+        } border-dashed rounded-lg bg-[#224957] hover:bg-[#092C39]`}
     >
       {localPreviewImage ? (
         <Box className="relative w-full h-full">
@@ -56,7 +83,9 @@ export function ImagePicker({ onImageSelect, previewImage }: ImagePickerProps) {
         <Box className="flex flex-col justify-center items-center">
           <FileDownloadIcon sx={{ fontSize: 32, color: "#fff" }} />
           <Typography variant="body1" className="text-white text-center">
-            Drop an image here or click to upload
+            {isDragging
+              ? "Drop the image here"
+              : "Drop an image here or click to upload"}
           </Typography>
         </Box>
       )}
