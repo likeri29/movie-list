@@ -10,7 +10,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const movie = await prisma.movieList.findUnique({
       where: { id },
@@ -35,7 +35,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const session = await getServerSession(authOptions);
     if (!session || !session.user || !session.user.id) {

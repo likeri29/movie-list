@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 export default function AddMoviePage() {
   const [createMovie, { isLoading }] = useCreateMovieMutation();
+
   const router = useRouter();
 
   const handleFormSubmit = async (data: MovieFormValues) => {

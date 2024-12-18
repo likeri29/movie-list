@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
+import Link from "next/link";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Input, ImagePicker } from "@/components";
 import { MovieFormValues } from "@/types";
@@ -78,7 +79,7 @@ export function MovieForm({
         />
 
         <Box className="flex flex-col md:flex-row gap-2 max-w-[362px] mt-6 md:mt-14">
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth component={Link} href="/">
             Cancel
           </Button>
           <Button

@@ -16,6 +16,8 @@ export default function EditMoviePage() {
   const [updateMovie] = useUpdateMovieMutation();
   const [movieData, setMovieData] = useState<MovieFormValues | null>(null);
 
+  console.log("ID OF THE MOVIE", id);
+
   useEffect(() => {
     if (data) {
       setMovieData({
@@ -62,7 +64,7 @@ export default function EditMoviePage() {
       reader.onerror = (error) => reject(error);
     });
 
-  if (isLoading) {
+  if (isLoading || !movieData) {
     return (
       <Box className="flex justify-center items-center">
         <CircularProgress />
@@ -70,12 +72,10 @@ export default function EditMoviePage() {
     );
   }
 
-  if (error || !movieData) {
-    return (
-      <Typography variant="body1" className="text-red-500">
-        Error fetching movie data.
-      </Typography>
-    );
+  if (error) {
+    toast.error("Error fetching movie");
+    router.push("/");
+    return;
   }
 
   return (

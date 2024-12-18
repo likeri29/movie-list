@@ -47,7 +47,7 @@ export function ImagePicker({ onImageSelect, previewImage }: ImagePickerProps) {
             src={localPreviewImage}
             alt="Uploaded"
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
             className="rounded-lg"
             priority
           />

@@ -6,9 +6,11 @@ export const movieApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/",
   }),
+  tagTypes: ["Movies"],
   endpoints: (builder) => ({
     getMovies: builder.query<MoviesResponse, void>({
       query: () => "movieList",
+      providesTags: [{ type: "Movies", id: "LIST" }],
     }),
 
     getMovieById: builder.query<Movie, string>({
@@ -21,6 +23,16 @@ export const movieApi = createApi({
         method: "POST",
         body: newMovie,
       }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            movieApi.util.invalidateTags([{ type: "Movies", id: "LIST" }])
+          );
+        } catch (err) {
+          console.error("Error while creating movie", err);
+        }
+      },
     }),
 
     updateMovie: builder.mutation<
@@ -32,6 +44,18 @@ export const movieApi = createApi({
         method: "PATCH",
         body: updatedMovie,
       }),
+
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+
+          dispatch(
+            movieApi.util.invalidateTags([{ type: "Movies", id: "LIST" }])
+          );
+        } catch (err) {
+          console.error("Error while updating movie", err);
+        }
+      },
     }),
   }),
 });
