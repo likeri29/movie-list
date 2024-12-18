@@ -10,7 +10,9 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !session.user.id) {
+    const userId = (session?.user as { id?: string })?.id;
+
+    if (!session || !userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
         title,
         publishingYear: parseInt(publishingYear),
         image: imageUrl,
-        userId: session.user.id,
+        userId,
       },
     });
 
@@ -51,15 +53,15 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !session.user.id) {
+    const userId = (session?.user as { id?: string })?.id;
+
+    if (!session || !userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
-
-    const userId = session.user.id;
 
     const offset = (page - 1) * limit;
 

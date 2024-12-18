@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -5,12 +6,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 const prisma = new PrismaClient();
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, context: { params: any }) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
 
     const movie = await prisma.movieList.findUnique({
       where: { id },
@@ -30,15 +28,14 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(req: NextRequest, context: { params: any }) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
 
     const session = await getServerSession(authOptions);
-    if (!session || !session.user || !session.user.id) {
+    const userId = (session?.user as { id?: string })?.id;
+
+    if (!session || !userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
