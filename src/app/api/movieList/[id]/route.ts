@@ -20,7 +20,7 @@ export async function GET(
       return NextResponse.json({ message: "Movie not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ movie });
+    return NextResponse.json(movie);
   } catch (error) {
     console.error("Error fetching movie:", error);
     return NextResponse.json(

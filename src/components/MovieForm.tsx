@@ -1,16 +1,21 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Input, ImagePicker } from "@/components";
 import { MovieFormValues } from "@/types";
 
 interface MovieFormProps {
   onSubmit: (data: MovieFormValues) => void;
+  loading: boolean;
   defaultValues?: MovieFormValues;
 }
 
-export function MovieForm({ onSubmit, defaultValues }: MovieFormProps) {
+export function MovieForm({
+  onSubmit,
+  defaultValues,
+  loading,
+}: MovieFormProps) {
   const {
     handleSubmit,
     control,
@@ -76,8 +81,21 @@ export function MovieForm({ onSubmit, defaultValues }: MovieFormProps) {
           <Button variant="outlined" fullWidth>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" fullWidth>
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={loading}
+            sx={{
+              borderRadius: "10px",
+              "&:hover": { backgroundColor: "#28b66b" },
+            }}
+          >
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: "#fff" }} />
+            ) : (
+              "Submit"
+            )}
           </Button>
         </Box>
       </Box>
